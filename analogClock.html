@@ -17,10 +17,11 @@
 		#clock-container {
 			text-align: center;
 			margin-top: 20px;
+			margin-bottom: 20px;
 		}
 		#clock {
 			position: relative;
-			border: 6px solid black;
+			border: 10px ridge blue;
 			margin: auto;
 			width: 400px;
 			height: 400px;
@@ -189,6 +190,7 @@
 		    width: 25%;
 		    border:6px solid purple;
 		    border-radius: 30%;
+		    z-index: 96;
 		}
 		#min-hand {
 			-ms-transform: rotate(210deg); /* IE 9 */
@@ -200,6 +202,7 @@
 			left: 49.5%;
 		    border:4px solid blue;
 		    border-radius: 30%;
+		    z-index: 97;
 		}
 		#sec-hand {
 			-ms-transform: rotate(120deg); /* IE 9 */
@@ -213,6 +216,7 @@
 			-ms-transform-origin: 11% 40%; /* IE 9 */
             -webkit-transform-origin: 11% 40%; /* Chrome, Safari, Opera */
             transform-origin: 11% 40%;
+			z-index: 98;
 		}
 		#clock-center {
 		    position: absolute;
@@ -223,9 +227,21 @@
 			transform: translate(-50%, -50%);
 			color: red;
 			font-size: 46pt;
+			z-index: 99;
 		}
 		#clock-center span {
 			vertical-align: middle;
+		}
+		#day-date {
+			border: 4px ridge blue;
+			position: absolute;
+			top: 46.5%;
+			right: 15%;
+			width: 25%;
+			color: rgba(233,13,2,1);
+			background: rgba(255,255,255,1);
+			border-radius: 8px;
+			/* box-shadow: -2px -2px 3px black; */ 
 		}
 		#digital-clock {
 			color: rgba(123,12,245,1);
@@ -265,8 +281,14 @@
 			<div id="min-hand" class="clock-hands"><span></span></div>
 			<div id="sec-hand" class="clock-hands"><span></span></div>
 			<div id="clock-center"><span><ul><li></li></ul></span></div>
+			<div id="day-date"></div>
 		</div>
-		<div id="digital-clock"></div>
+		
+	</section>
+	<hr/>
+	<section>
+	  <p>Digital Clock</p>
+	  <div id="digital-clock"></div>	
 	</section>
 	<aside>
 		
@@ -275,17 +297,20 @@
 		copy rights :Vimlesh Singh 2016 &copy; register &reg; <a href="https://vimleshsinghk.github.io/" target="_blank">www.vimlesh.co.uk</a>
 	</footer>
 <script type="text/javascript">
-  var myClock = setInterval(updateTime, 1000);
-
-function updateTime() {
+  var myClock = setInterval(updateDateTime, 1000);
+  var hourHand = document.getElementById("hour-hand"),
+      minuteHand = document.getElementById("min-hand"),
+      secondHand = document.getElementById("sec-hand"),
+      digitalOut = document.getElementById("digital-clock"),
+      dayDateOut = document.getElementById("day-date"),
+      days = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
+function updateDateTime() {
     var myTime = new Date();
-    document.getElementById("digital-clock").innerHTML = myTime.toLocaleTimeString();
-    var hourHand = document.getElementById("hour-hand"),
-        minuteHand = document.getElementById("min-hand"),
-        secondHand = document.getElementById("sec-hand"),
-        hour = myTime.getHours(),
+     digitalOut.innerHTML = myTime.toLocaleTimeString();
+    var hour = myTime.getHours(),
         min = myTime.getMinutes(),
         sec = myTime.getSeconds();
+        dayDateOut.innerHTML = myTime.getDate() + "|" + days[myTime.getDay()];
         if(hour >12) {
         	hour = hour - 12;
         }
