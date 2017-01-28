@@ -2,10 +2,11 @@
 <html>
 <head>
 	<title>Analog Clock</title>
-	<link rel="stylesheet" href="#">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<style>
 		*{margin: 0; padding: 0; box-sizing: border-box;}
 		body {
+			width: 100%;
 			text-align: center;
 			margin: auto;
 			font-size: 18pt;
@@ -289,6 +290,7 @@
 	<hr/>
 	<section>
 	  <p>Digital Clock</p>
+	  <audio src="audio/cuckoo_clock_at_1_o_clock.ogg" id="clock-sound"></audio>
 	  <div id="digital-clock"></div>	
 	</section>
 	<aside>
@@ -298,52 +300,48 @@
 		copy rights :Vimlesh Singh 2016 &copy; register &reg; <a href="https://vimleshsinghk.github.io/" target="_blank">www.vimlesh.co.uk</a>
 	</footer>
 <script type="text/javascript">
-  var myClock = setInterval(updateDateTime, 1000);
-  var hourHand = document.getElementById("hour-hand"),
-      minuteHand = document.getElementById("min-hand"),
-      secondHand = document.getElementById("sec-hand"),
-      digitalOut = document.getElementById("digital-clock"),
-      dayDateOut = document.getElementById("day-date"),
-      days = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
-function updateDateTime() {
-    var myTime = new Date();
-     digitalOut.innerHTML = myTime.toLocaleTimeString();
-    var hour = myTime.getHours(),
-        min = myTime.getMinutes(),
-        sec = myTime.getSeconds();
-        dayDateOut.innerHTML = myTime.getDate() + "|" + days[myTime.getDay()];
-        if(hour >12) {
-        	hour = hour - 12;
-        }
-        if(min <= 5) {
-        	hour = hour + 0.08;
-        } else if(min <= 10) {
-        	hour = hour + 0.16;
-        } else if(min <= 15) {
-        	hour = hour + 0.24;
-        } else if(min <= 20) {
-        	hour = hour + 0.32;
-        } else if(min <= 25) {
-        	hour = hour + 0.4;
-        } else if(min <= 30) {
-        	hour = hour + 0.48;
-        } else if(min <= 35) {
-        	hour = hour + 0.56;
-        } else if(min <= 40) {
-        	hour = hour + 0.64;
-        } else if(min <= 45) {
-        	hour = hour + 0.72;
-        } else if(min <= 50) {
-        	hour = hour + 0.8;
-        } else if(min <= 55) {
-        	hour = hour + 0.86;
-        } else if(min <= 59) {
-        	hour = hour + 0.94;
-        } 
-        hourHand.style.transform = "rotate(" + (hour*30 - 90) +"deg)";
-        minuteHand.style.transform = "rotate(" + (min*6 - 90) + "deg)";
-        secondHand.style.transform = "rotate(" + (sec*6 - 90) + "deg)";
-}
+(function(){
+	var myClock = setInterval(updateDateTime, 1000);
+	var hourHand = document.getElementById("hour-hand"),
+		minuteHand = document.getElementById("min-hand"),
+		secondHand = document.getElementById("sec-hand"),
+		digitalOut = document.getElementById("digital-clock"),
+		dayDateOut = document.getElementById("day-date"),
+		days = ["SUN","MON","TUE","WED","THU","FRI","SAT"],
+		clockSound = document.getElementById("clock-sound");
+		var count = 0;
+		function updateDateTime() {
+			var myTime = new Date();
+			digitalOut.innerHTML = myTime.toLocaleTimeString();
+			var hour = myTime.getHours(),
+	            min = myTime.getMinutes(),
+	            sec = myTime.getSeconds();
+	            dayDateOut.innerHTML = myTime.getDate() + "|" + days[myTime.getDay()];
+
+	            if(hour > 12){
+	            	hour = hour - 12;
+	            };
+	            var chimeSound = function() {
+	            	if(count >= hour) {
+	            		clearInterval(chime);
+	            		count = 0;
+	            	} else {
+	            		++count;
+	            		clockSound.play();
+	            	}	
+	            }
+	            if(min === 0 && sec === 0) {
+	            	var chime = setInterval(chimeSound,1000);
+	            }
+	            if(min === 30 && sec === 0) {
+	            	clockSound.play();
+	            }
+	            hourHand.style.transform = "rotate(" + (hour*30 + (min/2) - 90) +"deg)";
+	            minuteHand.style.transform = "rotate(" + (min*6 + (sec/10)- 90) + "deg)";
+	            secondHand.style.transform = "rotate(" + (sec*6 - 90) + "deg)";
+	        }
+	    })()
+
 </script>
 </body>
 </html>
